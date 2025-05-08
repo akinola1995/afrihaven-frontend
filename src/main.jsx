@@ -13,6 +13,7 @@ import ShortletListings from './pages/Listings/ShortletListings';
 import LandListings from './pages/Listings/LandListings';
 import AddListing from './pages/Listings/AddListing';
 import Calendar from './pages/Calendar';
+import RenterDashboard from './pages/Dashboard/RenterDashboard';
 import PropertyDetails from './pages/Property/PropertyDetails';
 import Profile from './pages/Profile';
 import ShortletExplorer from './pages/explore/ShortletExplorer';
@@ -20,9 +21,15 @@ import VacationExplorer from './pages/explore/VacationExplorer';
 import RentStatus from './pages/Property/RentStatus';
 import RentExplorer from './pages/explore/RentExplorer';
 import SaleExplorer from './pages/explore/SaleExplorer';
+import DashboardOwner from './pages/Dashboard/DashboardOwner';
+import AgentDashboard from './pages/Dashboard/AgentDashboard';
+import InquirerDashboard from './pages/Dashboard/InquirerDashboard';
+import AdminDashboard from './pages/Dashboard/AdminDashboard';
+import BuyerDashboard from './pages/Dashboard/BuyerDashboard'; // Optional
 import Tenants from './pages/Property/Tenants';
 import TenantDashboard from "./pages/Dashboard/TenantDashboard";
-
+import ExplorePage from './pages/explore/ExplorePage';
+import Inbox from './pages/Inbox';
 import Maintenance from './pages/Property/Maintenance';
 import Documents from './pages/Property/Documents';
 import Register from './pages/RegisterPage';
@@ -44,6 +51,13 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         {/* Public routes */}
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/explore" element={<ExplorePage />} />
+        <Route path="/explore/rent" element={<RentExplorer />} />
+        <Route path="/explore/sale" element={<SaleExplorer />} />
+        <Route path="/explore/shortlet" element={<ShortletExplorer />} />
+        <Route path="/explore/vacation" element={<VacationExplorer />} />
+        <Route path="/properties/:propertyId/details" element={<PropertyDetails />} />
 
         {/* Private routes (require login) */}
         <Route
@@ -55,21 +69,21 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/add-property" element={<AddProperty />} />
                   <Route path="/properties" element={<ViewProperties />} />
-
+                  <Route path="/dashboard/inquirer" element={<InquirerDashboard />} />
                   <Route path="/listings/rent" element={<RentListings />} />
                   <Route path="/listings/sale" element={<SaleListings />} />
                   <Route path="/listings/shortlet" element={<ShortletListings />} />
                   <Route path="/listings/land" element={<LandListings />} />
                   <Route path="/add-listing/:type" element={<AddListing />} />
-                  <Route path="/register" element={<Register />} />
+                  <Route path="/dashboard/renter" element={<RenterDashboard />} />
+                  
 
-                  <Route path="/explore/shortlet" element={<ShortletExplorer />} />
-                  <Route path="/explore/vacation" element={<VacationExplorer />} />
                   <Route path="/dashboard/tenant" element={<TenantDashboard />} />
-
-                  <Route path="/explore/rent" element={<RentExplorer />} />
-                  <Route path="/explore/sale" element={<SaleExplorer />} />
-                  <Route path="/properties/:propertyId/details" element={<PropertyDetails />} />
+                  <Route path="/dashboard/owner" element={<DashboardOwner />} />
+                  <Route path="/dashboard/agent" element={<AgentDashboard />} />
+                  <Route path="/dashboard/admin" element={<AdminDashboard />} />
+                  <Route path="/dashboard/buyer" element={<BuyerDashboard />} /> {/* Optional */}
+                  <Route path="/inbox" element={<Inbox />} />
                   <Route path="/properties/:propertyId/rent-status" element={<RentStatus />} />
                   <Route path="/properties/:propertyId/tenants" element={<Tenants />} />
                   <Route path="/properties/:propertyId/maintenance" element={<Maintenance />} />

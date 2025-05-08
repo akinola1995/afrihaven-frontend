@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const roles = ['Owner', 'Agent', 'Buyer', 'Renter', 'Tenant'];
-
 function Register() {
-  const [form, setForm] = useState({ email: '', password: '', confirm: '', role: 'Owner' });
-  const [error, setError] = useState('');
   const navigate = useNavigate();
+  const [form, setForm] = useState({
+    fullName: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    phone: '',
+    role: 'Tenant'
+  });
+
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -14,18 +20,28 @@ function Register() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (form.password !== form.confirm) {
-      return setError('Passwords do not match');
+
+    // Check password match
+    if (form.password !== form.confirmPassword) {
+      setError('Passwords do not match.');
+      return;
     }
 
-    // Simulate registration by saving to localStorage
-    const users = JSON.parse(localStorage.getItem('users') || '{}');
-    if (users[form.email]) {
-      return setError('User already exists');
-    }
+    // Simulate registration (can be replaced with API call)
+    const newUser = {
+      fullName: form.fullName,
+      email: form.email,
+      password: form.password,
+      phone: form.phone,
+      role: form.role
+    };
 
-    users[form.email] = { password: form.password, role: form.role };
-    localStorage.setItem('users', JSON.stringify(users));
+    console.log('Registered user:', newUser);
+
+    // Save minimal info in localStorage (not for production!)
+    localStorage.setItem('auth', 'false'); // Force login after registration
+    localStorage.setItem('registeredUser', JSON.stringify(newUser));
+    
     navigate('/login');
   };
 
@@ -34,7 +50,18 @@ function Register() {
       <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
         <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">Register</h2>
         {error && <p className="text-red-600 text-sm mb-3">{error}</p>}
+
         <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="text"
+            name="fullName"
+            placeholder="Full Name"
+            value={form.fullName}
+            onChange={handleChange}
+            className="w-full border p-2 rounded"
+            required
+          />
+
           <input
             type="email"
             name="email"
@@ -44,6 +71,16 @@ function Register() {
             className="w-full border p-2 rounded"
             required
           />
+
+          <input
+            type="tel"
+            name="phone"
+            placeholder="Phone Number"
+            value={form.phone}
+            onChange={handleChange}
+            className="w-full border p-2 rounded"
+          />
+
           <input
             type="password"
             name="password"
@@ -53,25 +90,31 @@ function Register() {
             className="w-full border p-2 rounded"
             required
           />
+
           <input
             type="password"
-            name="confirm"
+            name="confirmPassword"
             placeholder="Confirm Password"
-            value={form.confirm}
+            value={form.confirmPassword}
             onChange={handleChange}
             className="w-full border p-2 rounded"
             required
           />
+
           <select
             name="role"
             value={form.role}
             onChange={handleChange}
             className="w-full border p-2 rounded"
           >
-            {roles.map((r) => (
-              <option key={r} value={r}>{r}</option>
-            ))}
+            <option value="Tenant">Tenant</option>
+            <option value="Owner">Owner</option>
+            <option value="Agent">Agent</option>
+            <option value="Buyer">Buyer</option>
+            <option value="Renter">Renter</option>
+            <option value="Inquirer">Inquirer</option>
           </select>
+
           <button
             type="submit"
             className="bg-blue-600 text-white w-full py-2 rounded hover:bg-blue-700 transition"
@@ -79,6 +122,13 @@ function Register() {
             Register
           </button>
         </form>
+
+        <p className="text-sm text-center mt-4 text-gray-600">
+          Already have an account?{' '}
+          <a href="/login" className="text-blue-600 underline">
+            Login here
+          </a>
+        </p>
       </div>
     </div>
   );

@@ -1,41 +1,10 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-const navSections = [
-  {
-    label: 'Dashboard',
-    path: '/dashboard'
-  },
-  {
-    label: 'Properties',
-    children: [
-      { label: 'Add Property', path: '/add-property' },
-      { label: 'My Properties', path: '/properties' }
-    ]
-  },
-  {
-    label: 'Listings',
-    children: [
-      { label: 'Rent', path: '/listings/rent' },
-      { label: 'Sale', path: '/listings/sale' },
-      { label: 'Short Lets', path: '/listings/shortlet' },
-      { label: 'Land', path: '/listings/land' }
-    ]
-  },
-  {
-    label: 'Calendar',
-    path: '/calendar'
-  },
-  {
-    label: 'Profile',
-    path: '/profile'
-  }
-];
-
 function MainLayout({ children }) {
   const location = useLocation();
   const navigate = useNavigate();
-  const email = localStorage.getItem('email') || 'user@caremyhome.com';
+  const email = localStorage.getItem('email') || 'user@afrihaven.com';
   const role = localStorage.getItem('role') || 'User';
 
   const handleLogout = () => {
@@ -45,14 +14,88 @@ function MainLayout({ children }) {
     navigate('/login');
   };
 
+  // Define all navs but show only what matches user role
+  const navItemsByRole = {
+    Admin: [
+      { label: 'Dashboard', path: '/dashboard' },
+      { label: 'Properties', children: [
+          { label: 'Add Property', path: '/add-property' },
+          { label: 'My Properties', path: '/properties' }
+        ] 
+      },
+      { label: 'Listings', children: [
+          { label: 'Rent', path: '/listings/rent' },
+          { label: 'Sale', path: '/listings/sale' },
+          { label: 'Short Lets', path: '/listings/shortlet' },
+          { label: 'Land', path: '/listings/land' }
+        ] 
+      },
+      { label: 'Calendar', path: '/calendar' },
+      { label: 'Inbox', path: '/inbox' },
+      { label: 'Profile', path: '/profile' }
+    ],
+
+    Owner: [
+      { label: 'Dashboard', path: '/dashboard-owner' },
+      { label: 'Properties', children: [
+          { label: 'Add Property', path: '/add-property' },
+          { label: 'My Properties', path: '/properties' }
+        ] 
+      },
+      { label: 'Inbox', path: '/inbox' },
+      { label: 'Profile', path: '/profile' }
+    ],
+
+    Agent: [
+      { label: 'Dashboard', path: '/dashboard-agent' },
+      { label: 'Properties', children: [
+          { label: 'Add Property', path: '/add-property' },
+          { label: 'My Properties', path: '/properties' }
+        ] 
+      },
+      { label: 'Listings', children: [
+          { label: 'Rent', path: '/listings/rent' },
+          { label: 'Sale', path: '/listings/sale' }
+        ] 
+      },
+      { label: 'Inbox', path: '/inbox' },
+      { label: 'Profile', path: '/profile' }
+    ],
+
+    Tenant: [
+      { label: 'Dashboard', path: '/dashboard/tenant' },
+      { label: 'Inbox', path: '/inbox' },
+      { label: 'Profile', path: '/profile' }
+    ],
+
+    Buyer: [
+      { label: 'Dashboard', path: '/dashboard/buyer' },
+      { label: 'Inbox', path: '/inbox' },
+      { label: 'Profile', path: '/profile' }
+    ],
+
+    Renter: [
+      { label: 'Dashboard', path: '/dashboard/renter' },
+      { label: 'Inbox', path: '/inbox' },
+      { label: 'Profile', path: '/profile' }
+    ],
+
+    Inquirer: [
+      { label: 'Inbox', path: '/inbox' },
+      { label: 'Profile', path: '/profile' }
+    ]
+  };
+
+  const userNav = navItemsByRole[role] || [];
+
   return (
     <div className="flex min-h-screen">
       {/* Sidebar */}
       <aside className="w-64 bg-white border-r shadow-sm p-6 space-y-6 flex flex-col justify-between">
         <div>
-          <h2 className="text-xl font-bold text-blue-700 mb-4">CareMyHome</h2>
+          <h2 className="text-xl font-bold text-blue-700 mb-4">AfriHaven</h2>
           <nav className="space-y-4">
-            {navSections.map((section, i) => (
+            {userNav.map((section, i) => (
               <div key={i}>
                 {section.path ? (
                   <Link

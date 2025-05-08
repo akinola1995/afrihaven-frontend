@@ -1,5 +1,6 @@
 import React from "react";
 import { format } from "date-fns";
+import BackButton from "../../components/BackButton";
 
 const mockTenantData = {
   email: "tenant1@caremyhome.com",
@@ -31,6 +32,7 @@ function TenantDashboard() {
 
   return (
     <div className="p-6 space-y-6 max-w-4xl mx-auto">
+      <BackButton />
       <h1 className="text-2xl font-bold text-blue-800">Welcome, {tenant.name}</h1>
 
       {/* Property Info */}
