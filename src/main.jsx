@@ -33,6 +33,8 @@ import Inbox from './pages/Inbox';
 import Maintenance from './pages/Property/Maintenance';
 import Documents from './pages/Property/Documents';
 import Register from './pages/RegisterPage';
+import TermsOfUse from './pages/legal/TermsOfUse';
+import PrivacyPolicy from './pages/legal/PrivacyPolicy';
 
 import { Landing, Login } from './pages/AuthPages'; // 👈 Import these
 import './styles/index.css';
@@ -58,6 +60,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/explore/shortlet" element={<ShortletExplorer />} />
         <Route path="/explore/vacation" element={<VacationExplorer />} />
         <Route path="/properties/:propertyId/details" element={<PropertyDetails />} />
+        <Route path="/terms" element={<TermsOfUse />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
 
         {/* Private routes (require login) */}
         <Route

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import Footer from '../components/Footer';
 
 function MainLayout({ children }) {
   const location = useLocation();
@@ -36,7 +37,7 @@ function MainLayout({ children }) {
     ],
 
     Owner: [
-      { label: 'Dashboard', path: '/dashboard-owner' },
+      { label: 'Dashboard', path: '/dashboard/owner' },
       { label: 'Properties', children: [
           { label: 'Add Property', path: '/add-property' },
           { label: 'My Properties', path: '/properties' }
@@ -47,7 +48,7 @@ function MainLayout({ children }) {
     ],
 
     Agent: [
-      { label: 'Dashboard', path: '/dashboard-agent' },
+      { label: 'Dashboard', path: '/dashboard/agent' },
       { label: 'Properties', children: [
           { label: 'Add Property', path: '/add-property' },
           { label: 'My Properties', path: '/properties' }
@@ -160,6 +161,7 @@ function MainLayout({ children }) {
         {/* Main Content */}
         <main className="p-6 overflow-y-auto">{children}</main>
       </div>
+      <Footer />
     </div>
   );
 }

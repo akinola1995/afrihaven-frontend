@@ -44,17 +44,34 @@ const mockOwner = {
       file: "May_Rent_Receipt.pdf",
     },
   ],
+  tenantAssignments: JSON.parse(localStorage.getItem("tenantAssignments") || "[]"),
+  unassignmentRequests: JSON.parse(localStorage.getItem("unassignmentRequests") || "[]"),
 };
 
 function DashboardOwner() {
   const owner = mockOwner;
 
+  const handleAssignTenant = (e) => {
+    e.preventDefault();
+    const email = e.target.tenantEmail.value;
+    const propertyId = e.target.propertyId.value;
+    const assignment = {
+      email,
+      propertyId,
+      assignedAt: new Date().toISOString(),
+    };
+
+    const prev = JSON.parse(localStorage.getItem("tenantAssignments") || "[]");
+    const updated = [assignment, ...prev];
+    localStorage.setItem("tenantAssignments", JSON.stringify(updated));
+    alert("Tenant assigned successfully! Reload to see update.");
+    e.target.reset();
+  };
+
   return (
     <div className="max-w-6xl mx-auto p-6 space-y-6">
-        <BackButton />
-      <h1 className="text-2xl font-bold text-blue-800">
-        Welcome, {owner.name}
-      </h1>
+      <BackButton />
+      <h1 className="text-2xl font-bold text-blue-800">Welcome, {owner.name}</h1>
 
       {/* Summary Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -79,23 +96,14 @@ function DashboardOwner() {
       </div>
 
       {/* Quick Links */}
-      <div className="flex gap-4">
-        <Link
-          to="/add-property"
-          className="bg-blue-600 text-white px-4 py-2 rounded text-sm"
-        >
+      <div className="flex flex-wrap gap-4">
+        <Link to="/add-property" className="bg-blue-600 text-white px-4 py-2 rounded text-sm">
           + Add Property
         </Link>
-        <Link
-          to="/properties"
-          className="bg-gray-200 text-blue-700 px-4 py-2 rounded text-sm"
-        >
+        <Link to="/properties" className="bg-gray-200 text-blue-700 px-4 py-2 rounded text-sm">
           View All Properties
         </Link>
-        <Link
-          to="/inbox"
-          className="bg-green-600 text-white px-4 py-2 rounded text-sm"
-        >
+        <Link to="/inbox" className="bg-green-600 text-white px-4 py-2 rounded text-sm">
           Go to Inbox
         </Link>
       </div>
@@ -110,18 +118,20 @@ function DashboardOwner() {
               <p className="text-sm text-gray-500">
                 Type: {prop.type.toUpperCase()} | Tenants: {prop.tenants}
               </p>
-              <Link
-                to={`/properties/${prop.id}/details`}
-                className="text-blue-600 text-xs underline"
-              >
-                View Details
-              </Link>
+              <div className="text-xs space-x-4 mt-1">
+                <Link to={`/properties/${prop.id}/details`} className="text-blue-600 underline">
+                  View Details
+                </Link>
+                <Link to={`/properties/${prop.id}/maintenance`} className="text-yellow-600 underline">
+                  Maintenance
+                </Link>
+              </div>
             </li>
           ))}
         </ul>
       </div>
 
-      {/* Rent Submissions */}
+      {/* Recent Rent Uploads */}
       <div className="bg-white p-4 rounded shadow">
         <h2 className="text-lg font-semibold mb-2">Recent Rent Payments</h2>
         {owner.rentUploads.length === 0 ? (
@@ -130,16 +140,15 @@ function DashboardOwner() {
           <ul className="space-y-2">
             {owner.rentUploads.map((rent, i) => (
               <li key={i} className="text-sm text-gray-700 border-b pb-2">
-                {rent.tenant} uploaded <strong>{rent.file}</strong> for{" "}
-                <strong>₦{rent.amount.toLocaleString()}</strong> on{" "}
-                {rent.date}
+                <strong>{rent.tenant}</strong> uploaded <strong>{rent.file}</strong> for{" "}
+                <strong>₦{rent.amount.toLocaleString()}</strong> on {rent.date}
               </li>
             ))}
           </ul>
         )}
       </div>
 
-      {/* Maintenance */}
+      {/* Maintenance Requests */}
       <div className="bg-white p-4 rounded shadow">
         <h2 className="text-lg font-semibold mb-2">Maintenance Requests</h2>
         {owner.maintenance.length === 0 ? (
@@ -151,14 +160,75 @@ function DashboardOwner() {
                 <strong>{m.issue}</strong> on Property: {m.property} |{" "}
                 <span
                   className={`${
-                    m.status === "Resolved"
-                      ? "text-green-600"
-                      : "text-yellow-600"
+                    m.status === "Resolved" ? "text-green-600" : "text-yellow-600"
                   }`}
                 >
                   {m.status}
                 </span>{" "}
                 | {m.date}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      {/* Assign Tenant */}
+      <div className="bg-white p-4 rounded shadow">
+        <h2 className="text-lg font-semibold mb-2">Assign Tenant to Property</h2>
+        <form onSubmit={handleAssignTenant} className="space-y-3">
+          <input
+            type="email"
+            name="tenantEmail"
+            placeholder="Tenant Email"
+            className="w-full border p-2 rounded"
+            required
+          />
+          <select name="propertyId" className="w-full border p-2 rounded" required>
+            <option value="">Select Property</option>
+            {owner.properties.map((prop) => (
+              <option key={prop.id} value={prop.id}>
+                {prop.title}
+              </option>
+            ))}
+          </select>
+          <button
+            type="submit"
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm"
+          >
+            Assign Tenant
+          </button>
+        </form>
+      </div>
+
+      {/* Tenant Assignment History */}
+      <div className="bg-white p-4 rounded shadow">
+        <h2 className="text-lg font-semibold mb-2">Tenant Assignment History</h2>
+        {owner.tenantAssignments.length === 0 ? (
+          <p className="text-gray-500 text-sm">No assignment history found.</p>
+        ) : (
+          <ul className="space-y-2">
+            {owner.tenantAssignments.map((entry, i) => (
+              <li key={i} className="text-sm text-gray-700 border-b pb-2">
+                Assigned <strong>{entry.email}</strong> to <strong>{entry.propertyId}</strong> on{" "}
+                {new Date(entry.assignedAt).toLocaleDateString()}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      {/* Unassignment Requests */}
+      <div className="bg-white p-4 rounded shadow">
+        <h2 className="text-lg font-semibold mb-2">Unassignment Requests</h2>
+        {owner.unassignmentRequests.length === 0 ? (
+          <p className="text-gray-500 text-sm">No unassignment requests.</p>
+        ) : (
+          <ul className="space-y-2">
+            {owner.unassignmentRequests.map((req, i) => (
+              <li key={i} className="text-sm text-gray-700 border-b pb-2">
+                <strong>{req.email}</strong> requested unassignment from{" "}
+                <strong>{req.propertyId}</strong> on{" "}
+                {new Date(req.requestedAt).toLocaleDateString()}
               </li>
             ))}
           </ul>
