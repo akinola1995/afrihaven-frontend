@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer';
+import axios from 'axios';
+
 
 const Landing = () => {
 
@@ -19,10 +21,24 @@ const handleChange = (e) => {
   setForm({ ...form, [e.target.name]: e.target.value });
 };
 
-const handleSearch = (e) => {
+// const handleSearch = (e) => {
+//   e.preventDefault();
+//   const query = new URLSearchParams(form).toString();
+//   navigate(`/explore?${query}`);
+// };
+
+const handleSearch = async (e) => {
   e.preventDefault();
-  const query = new URLSearchParams(form).toString();
-  navigate(`/explore?${query}`);
+  try {
+    const query = new URLSearchParams(form).toString();
+    const response = await axios.get(`http://localhost:8080/api/properties/search?${query}`);
+    
+    localStorage.setItem('searchResults', JSON.stringify(response.data)); // Optional: store for explore page
+    navigate(`/explore?${query}`);
+  } catch (err) {
+    alert("Search failed. Please try again.");
+    console.error(err);
+  }
 };
   const sections = [
     {
@@ -198,6 +214,116 @@ const validUsers = {
   'guest@afrihaven.com': { password: 'inquire123', role: 'Inquirer' }
 };
 
+// const Login = () => {
+//   const navigate = useNavigate();
+//   const [form, setForm] = useState({ email: '', password: '' });
+//   const [error, setError] = useState('');
+
+//   const handleChange = (e) => {
+//     setForm({ ...form, [e.target.name]: e.target.value });
+//   };
+
+//   const handleSubmit = (e) => {
+//     e.preventDefault();
+
+//     const saved = localStorage.getItem('registeredUser');
+//     const registeredUser = saved ? JSON.parse(saved) : null;
+
+//     let authenticatedUser = null;
+
+//     // First try localStorage-registered user
+//     if (
+//       registeredUser &&
+//       registeredUser.email === form.email &&
+//       registeredUser.password === form.password
+//     ) {
+//       authenticatedUser = registeredUser;
+//     }
+
+//     // If not found, try hardcoded fallback users
+//     if (!authenticatedUser && validUsers[form.email]) {
+//       if (validUsers[form.email].password === form.password) {
+//         authenticatedUser = { email: form.email, ...validUsers[form.email] };
+//       }
+//     }
+
+//     if (authenticatedUser) {
+//       localStorage.setItem('auth', 'true');
+//       localStorage.setItem('role', authenticatedUser.role);
+//       localStorage.setItem('email', authenticatedUser.email);
+
+//       switch (authenticatedUser.role) {
+//         case 'Owner':
+//           navigate('/dashboard/owner');
+//           break;
+//         case 'Agent':
+//           navigate('/dashboard/agent');
+//           break;
+//         case 'Admin':
+//           navigate('/dashboard/admin');
+//           break;
+//         case 'Tenant':
+//           navigate('/dashboard/tenant');
+//           break;
+//         case 'Buyer':
+//           navigate('/dashboard/buyer');
+//           break;
+//         case 'Renter':
+//           navigate('/dashboard/renter');
+//           break;
+//         case 'Inquirer':
+//         default:
+//           navigate('/dashboard/inquirer');
+//       }
+//     } else {
+//       setError('Invalid credentials. Please check email and password.');
+//     }
+//   };
+
+//   return (
+//     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-6">
+//       <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
+//         <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">Login</h2>
+//         {error && <p className="text-red-600 text-sm mb-3">{error}</p>}
+//         <form onSubmit={handleSubmit} className="space-y-4">
+//           <input
+//             type="email"
+//             name="email"
+//             placeholder="Email"
+//             value={form.email}
+//             onChange={handleChange}
+//             className="w-full border p-2 rounded"
+//             required
+//           />
+//           <input
+//             type="password"
+//             name="password"
+//             placeholder="Password"
+//             value={form.password}
+//             onChange={handleChange}
+//             className="w-full border p-2 rounded"
+//             required
+//           />
+//           <button
+//             type="submit"
+//             className="bg-blue-600 text-white w-full py-2 rounded hover:bg-blue-700 transition"
+//           >
+//             Login
+//           </button>
+//         </form>
+//         <p className="text-sm text-center mt-4 text-gray-600">
+//           Don’t have an account?{' '}
+//           <a href="/register" className="text-blue-600 underline">
+//             Register here
+//           </a>
+//         </p>
+//       </div>
+//     </div>
+//   );
+// };
+
+// src/pages/Login.jsx
+
 const Login = () => {
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: '', password: '' });
@@ -207,60 +333,46 @@ const Login = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
 
-    const saved = localStorage.getItem('registeredUser');
-    const registeredUser = saved ? JSON.parse(saved) : null;
+    try {
+      const response = await axios.post('http://localhost:8080/api/auth/login', form);
+      const { role, email, message } = response.data;
 
-    let authenticatedUser = null;
+      if (message === 'success') {
+        localStorage.setItem('auth', 'true');
+        localStorage.setItem('role', role);
+        localStorage.setItem('email', email);
 
-    // First try localStorage-registered user
-    if (
-      registeredUser &&
-      registeredUser.email === form.email &&
-      registeredUser.password === form.password
-    ) {
-      authenticatedUser = registeredUser;
-    }
-
-    // If not found, try hardcoded fallback users
-    if (!authenticatedUser && validUsers[form.email]) {
-      if (validUsers[form.email].password === form.password) {
-        authenticatedUser = { email: form.email, ...validUsers[form.email] };
+        switch (role) {
+          case 'Owner':
+            navigate('/dashboard/owner');
+            break;
+          case 'Agent':
+            navigate('/dashboard/agent');
+            break;
+          case 'Admin':
+            navigate('/dashboard/admin');
+            break;
+          case 'Tenant':
+            navigate('/dashboard/tenant');
+            break;
+          case 'Buyer':
+            navigate('/dashboard/buyer');
+            break;
+          case 'Renter':
+            navigate('/dashboard/renter');
+            break;
+          default:
+            navigate('/dashboard/inquirer');
+        }
+      } else {
+        setError('Invalid credentials. Please try again.');
       }
-    }
-
-    if (authenticatedUser) {
-      localStorage.setItem('auth', 'true');
-      localStorage.setItem('role', authenticatedUser.role);
-      localStorage.setItem('email', authenticatedUser.email);
-
-      switch (authenticatedUser.role) {
-        case 'Owner':
-          navigate('/dashboard/owner');
-          break;
-        case 'Agent':
-          navigate('/dashboard/agent');
-          break;
-        case 'Admin':
-          navigate('/dashboard/admin');
-          break;
-        case 'Tenant':
-          navigate('/dashboard/tenant');
-          break;
-        case 'Buyer':
-          navigate('/dashboard/buyer');
-          break;
-        case 'Renter':
-          navigate('/dashboard/renter');
-          break;
-        case 'Inquirer':
-        default:
-          navigate('/dashboard/inquirer');
-      }
-    } else {
-      setError('Invalid credentials. Please check email and password.');
+    } catch (err) {
+      setError('Authentication failed. Server may be unavailable.');
     }
   };
 

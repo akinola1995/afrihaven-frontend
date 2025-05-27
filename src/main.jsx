@@ -9,6 +9,7 @@ import AddProperty from './pages/AddProperty';
 import ViewProperties from './pages/ViewProperties';
 import RentListings from './pages/Listings/RentListings';
 import SaleListings from './pages/Listings/SaleListings';
+import VacationListings from './pages/Listings/VacationListings';
 import ShortletListings from './pages/Listings/ShortletListings';
 import LandListings from './pages/Listings/LandListings';
 import AddListing from './pages/Listings/AddListing';
@@ -28,7 +29,7 @@ import AdminDashboard from './pages/Dashboard/AdminDashboard';
 import BuyerDashboard from './pages/Dashboard/BuyerDashboard'; // Optional
 import Tenants from './pages/Property/Tenants';
 import TenantDashboard from "./pages/Dashboard/TenantDashboard";
-import ExplorePage from './pages/explore/ExplorePage';
+import Explore from './pages/explore/Explore';
 import Inbox from './pages/Inbox';
 import Maintenance from './pages/Property/Maintenance';
 import Documents from './pages/Property/Documents';
@@ -54,7 +55,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/explore" element={<ExplorePage />} />
+        <Route path="/explore" element={<Explore />} />
         <Route path="/explore/rent" element={<RentExplorer />} />
         <Route path="/explore/sale" element={<SaleExplorer />} />
         <Route path="/explore/shortlet" element={<ShortletExplorer />} />
@@ -76,6 +77,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                   <Route path="/dashboard/inquirer" element={<InquirerDashboard />} />
                   <Route path="/listings/rent" element={<RentListings />} />
                   <Route path="/listings/sale" element={<SaleListings />} />
+                  <Route path="/listings/vacation" element={<VacationListings />} />
+
                   <Route path="/listings/shortlet" element={<ShortletListings />} />
                   <Route path="/listings/land" element={<LandListings />} />
                   <Route path="/add-listing/:type" element={<AddListing />} />
