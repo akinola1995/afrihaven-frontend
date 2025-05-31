@@ -156,7 +156,10 @@ function Profile() {
         <input type="email" name="email" value={form.email || ''} disabled className="w-full border p-2 rounded bg-gray-100" />
         <input type="text" name="phone" placeholder="Phone Number" value={form.phone || ''} onChange={handleChange} className="w-full border p-2 rounded" />
         <input type="text" name="role" value={form.role || ''} disabled className="w-full border p-2 rounded bg-gray-100" />
-
+        
+        {form.avatarUrl && (
+           <img src={form.avatarUrl} alt="avatar" className="h-16 w-16 rounded-full mb-2" />
+            )}
         <div>
           <label className="block text-sm text-gray-600 mb-1">Upload Avatar (optional)</label>
           <input type="file" name="avatar" accept="image/*" onChange={handleChange} className="w-full border p-2 rounded" />

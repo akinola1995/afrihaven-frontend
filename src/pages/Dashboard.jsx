@@ -156,7 +156,8 @@ function Dashboard() {
   useEffect(() => {
     async function fetchStats() {
       try {
-        const res = await axios.get(`/api/dashboard/${role.toLowerCase()}`);
+        const email = localStorage.getItem('email');
+        const res = await axios.get(`/api/dashboard/${role.toLowerCase()}?email=${email}`);
         setStats(res.data);
       } catch (err) {
         console.error('Dashboard data error:', err);
