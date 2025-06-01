@@ -41,7 +41,7 @@ function Documents() {
 
   const fetchDocuments = async () => {
     try {
-      const res = await axios.get(`/api/documents/${propertyId}`);
+      const res = await axios.get(`http://localhost:8080/api/documents/${propertyId}`);
       setDocs(res.data);
     } catch (err) {
       console.error('Error fetching documents:', err);
@@ -61,7 +61,7 @@ function Documents() {
 
     setUploading(true);
     try {
-      await axios.post(`/api/documents/upload/${propertyId}`, formData, {
+      await axios.post(`http://localhost:8080/api/documents/upload/${propertyId}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       setFile(null);
@@ -101,7 +101,7 @@ function Documents() {
             <h3 className="font-semibold text-lg">{doc.name}</h3>
             <p className="text-sm text-gray-500">Uploaded on: {new Date(doc.uploadedAt).toLocaleDateString()}</p>
             <a
-              href={`/api/documents/download/${doc.id}`}
+              href={`http://localhost:8080/api/documents/download/${doc.id}`}
               className="text-blue-600 underline text-sm"
               target="_blank"
               rel="noreferrer"

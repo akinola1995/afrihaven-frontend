@@ -225,7 +225,7 @@ function AddProperty() {
         formData.append('video', form.video);
       }
 
-      await axios.post('/api/properties', formData, {
+      await axios.post('http://localhost:8080/api/properties', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }

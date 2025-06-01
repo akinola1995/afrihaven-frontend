@@ -14,9 +14,9 @@ function ViewProperties() {
       try {
         let endpoint = '';
         if (role === 'Owner') {
-          endpoint = `/api/properties/owner/${email}`;
+          endpoint = `http://localhost:8080/api/properties/owner/${email}`;
         } else if (role === 'Agent') {
-          endpoint = `/api/properties/agent/${email}`;
+          endpoint = `http://localhost:8080/api/properties/agent/${email}`;
         } 
         const res = await axios.get(endpoint);
         setProperties(res.data);

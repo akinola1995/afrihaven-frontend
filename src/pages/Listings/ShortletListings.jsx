@@ -22,7 +22,7 @@ function ShortletListings() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get('/api/properties?type=shortlet')
+    axios.get('http://localhost:8080/api/properties?type=shortlet')
       .then(res => {
         setShortlets(res.data);
         setLoading(false);

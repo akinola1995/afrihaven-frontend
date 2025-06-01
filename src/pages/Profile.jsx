@@ -112,7 +112,7 @@ function Profile() {
   useEffect(() => {
     const email = localStorage.getItem('email');
     if (email) {
-      axios.get(`/api/users/${email}`)
+      axios.get(`http://localhost:8080/api/users/${email}`)
         .then((res) => setForm(res.data))
         .catch(() => alert('Failed to load user profile.'));
     }
@@ -138,7 +138,7 @@ function Profile() {
     }
 
     try {
-      await axios.put(`/api/users/${form.email}`, formData, {
+      await axios.put(`http://localhost:8080/api/users/${form.email}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       alert('Profile updated successfully');

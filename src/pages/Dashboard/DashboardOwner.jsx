@@ -260,7 +260,7 @@ function DashboardOwner() {
   useEffect(() => {
     async function fetchOwnerDashboard() {
       try {
-        const { data } = await axios.get(`/api/dashboard/owner?email=${email}`);
+        const { data } = await axios.get(`http://localhost:8080/api/dashboard/owner?email=${email}`);
         setOwner({ name: data.name, properties: data.properties });
         setInquiries(data.inquiries || []);
         setMaintenance(data.maintenance || []);
@@ -281,7 +281,7 @@ function DashboardOwner() {
     const propertyId = e.target.propertyId.value;
 
     try {
-      await axios.post("/api/tenant/assign", {
+      await axios.post("http://localhost:8080/api/tenant/assign", {
         email,
         propertyId
       });

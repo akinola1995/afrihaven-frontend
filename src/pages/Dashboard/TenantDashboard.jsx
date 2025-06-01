@@ -146,8 +146,8 @@ function TenantDashboard() {
   useEffect(() => {
     const fetchTenantData = async () => {
       try {
-        const tenantRes = await axios.get(`/api/tenant/${email}`);
-        const docsRes = await axios.get(`/api/documents/tenant/${email}`);
+        const tenantRes = await axios.get(`http://localhost:8080/api/tenant/${email}`);
+        const docsRes = await axios.get(`http://localhost:8080/api/documents/tenant/${email}`);
         setTenantData(tenantRes.data);
         setDocuments(docsRes.data);
       } catch (err) {

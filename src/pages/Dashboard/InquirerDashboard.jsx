@@ -11,7 +11,7 @@ export default function InquirerDashboard() {
   useEffect(() => {
     if (!email) return;
 
-    axios.get(`/api/inquirer/inquiries?email=${email}`)
+    axios.get(`http://localhost:8080/api/inquirer/inquiries?email=${email}`)
       .then((res) => {
         setInquiries(res.data);
         const namePart = email.split("@")[0];

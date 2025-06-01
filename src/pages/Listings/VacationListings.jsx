@@ -8,7 +8,7 @@ function VacationListings() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get('/api/properties?type=vacation')
+    axios.get('http://localhost:8080/api/properties?type=vacation')
       .then(res => {
         setVacationHomes(res.data);
         setLoading(false);

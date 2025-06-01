@@ -21,7 +21,7 @@ function SaleListings() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get('/api/properties?type=sale')
+    axios.get('http://localhost:8080/api/properties?type=sale')
       .then(res => {
         setSales(res.data);
         setLoading(false);

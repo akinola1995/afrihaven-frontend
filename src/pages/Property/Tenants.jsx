@@ -172,11 +172,11 @@ function Tenants() {
   // Load tenants on mount
   useEffect(() => {
     if (propertyId) {
-      axios.get(`/api/tenants/assignments/${propertyId}`)
+      axios.get(`http://localhost:8080/api/tenants/assignments/${propertyId}`)
         .then(res => setAssignments(res.data))
         .catch(err => console.error('Error loading assignments:', err));
 
-      axios.get(`/api/tenants/manual/${propertyId}`)
+      axios.get(`http://localhost:8080/api/tenants/manual/${propertyId}`)
         .then(res => setManualTenants(res.data))
         .catch(err => console.error('Error loading manual tenants:', err));
     }
@@ -191,7 +191,7 @@ function Tenants() {
   const handleManualSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('/api/tenants/manual', {
+      const res = await axios.post('http://localhost:8080/api/tenants/manual', {
         ...form,
         propertyId,
       });
@@ -205,7 +205,7 @@ function Tenants() {
   // Delete email-based tenant
   const deleteAssigned = async (id) => {
     try {
-      await axios.delete(`/api/tenants/assignments/${id}`);
+      await axios.delete(`http://localhost:8080/api/tenants/assignments/${id}`);
       setAssignments(assignments.filter(t => t.id !== id));
     } catch (error) {
       console.error('Failed to delete assigned tenant:', error);
@@ -215,7 +215,7 @@ function Tenants() {
   // Delete manual tenant
   const deleteManual = async (id) => {
     try {
-      await axios.delete(`/api/tenants/manual/${id}`);
+      await axios.delete(`http://localhost:8080/api/tenants/manual/${id}`);
       setManualTenants(manualTenants.filter(t => t.id !== id));
     } catch (error) {
       console.error('Failed to delete manual tenant:', error);

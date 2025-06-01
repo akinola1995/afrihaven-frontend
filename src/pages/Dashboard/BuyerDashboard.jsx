@@ -64,7 +64,7 @@ export default function BuyerDashboard() {
 
   useEffect(() => {
     if (email) {
-      axios.get(`/api/inquiries/by-email?email=${email}`)
+      axios.get(`http://localhost:8080/api/inquiries/by-email?email=${email}`)
         .then((res) => setInquiries(res.data))
         .catch((err) => console.error("Error fetching buyer inquiries", err));
     }

@@ -117,13 +117,13 @@ function RentStatus() {
   const [rents, setRents] = useState([]);
 
   useEffect(() => {
-    axios.get(`/api/rents/${propertyId}`)
+    axios.get(`http://localhost:8080/api/rents/${propertyId}`)
       .then(res => setRents(res.data))
       .catch(err => console.error('Failed to load rent data', err));
   }, [propertyId]);
 
   const handleStatusChange = (id, newStatus) => {
-    axios.put(`/api/rents/update/${id}`, { status: newStatus })
+    axios.put(`http://localhost:8080/api/rents/update/${id}`, { status: newStatus })
       .then(res => {
         const updated = rents.map((r) => (r.id === id ? { ...r, status: newStatus } : r));
         setRents(updated);

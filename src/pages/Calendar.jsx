@@ -94,7 +94,7 @@ function Calendar() {
   useEffect(() => {
     async function fetchReminders() {
       try {
-        const response = await axios.get('/api/reminders', {
+        const response = await axios.get('http://localhost:8080/api/reminders', {
           params: { email: userEmail }
         });
         setReminders(response.data);
@@ -117,7 +117,7 @@ function Calendar() {
         ...form,
         email: userEmail
       };
-      const res = await axios.post('/api/reminders', newReminder);
+      const res = await axios.post('http://localhost:8080/api/reminders', newReminder);
       setReminders([res.data, ...reminders]);
       setForm({ title: '', date: '', type: 'Rent' });
     } catch (error) {

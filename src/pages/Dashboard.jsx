@@ -157,7 +157,7 @@ function Dashboard() {
     async function fetchStats() {
       try {
         const email = localStorage.getItem('email');
-        const res = await axios.get(`/api/dashboard/${role.toLowerCase()}?email=${email}`);
+        const res = await axios.get(`http://localhost:8080/api/dashboard/${role.toLowerCase()}?email=${email}`);
         setStats(res.data);
       } catch (err) {
         console.error('Dashboard data error:', err);

@@ -21,7 +21,7 @@ function RentListings() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get('/api/properties?type=rent')
+    axios.get('http://localhost:8080/api/properties?type=rent')
       .then(res => {
         setRentals(res.data);
         setLoading(false);

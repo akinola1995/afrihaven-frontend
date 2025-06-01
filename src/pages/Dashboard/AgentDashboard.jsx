@@ -305,7 +305,7 @@ function AgentDashboard() {
 
   // Fetch initial data
   useEffect(() => {
-    axios.get(`/api/agent/${agentEmail}/dashboard`).then(res => {
+    axios.get(`http://localhost:8080/api/agent/${agentEmail}/dashboard`).then(res => {
       setProperties(res.data.properties);
       setAssignedTenants(res.data.assignedTenants);
       setHistory(res.data.assignmentHistory);
@@ -321,13 +321,13 @@ function AgentDashboard() {
   const handleAssign = async (e) => {
     e.preventDefault();
     const newTenant = { ...tenantForm, agentEmail };
-    await axios.post("/api/assign-tenant", newTenant);
+    await axios.post("http://localhost:8080/api/assign-tenant", newTenant);
     alert("Tenant assigned successfully!");
     window.location.reload();
   };
 
   const handleUnassign = async (email) => {
-    await axios.post("/api/unassign-tenant", { agentEmail, email });
+    await axios.post("http://localhost:8080/api/unassign-tenant", { agentEmail, email });
     alert("Tenant unassigned.");
     window.location.reload();
   };
@@ -335,7 +335,7 @@ function AgentDashboard() {
   const handleAddAgent = async (e) => {
     e.preventDefault();
     const newAgent = { ...agentForm, registeredBy: agentEmail };
-    await axios.post("/api/admin/add-agent", newAgent);
+    await axios.post("http://localhost:8080/api/admin/add-agent", newAgent);
     alert("Agent added!");
     setAgentForm({ name: "", email: "" });
     window.location.reload();

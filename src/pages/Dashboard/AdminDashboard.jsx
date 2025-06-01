@@ -188,33 +188,33 @@ function AdminDashboard() {
   }, []);
 
   const fetchAdmins = async () => {
-    const res = await axios.get("/api/admins");
+    const res = await axios.get("http://localhost:8080/api/admins");
     setAdmins(res.data);
   };
 
   const fetchProperties = async () => {
-    const res = await axios.get("/api/properties");
+    const res = await axios.get("http://localhost:8080/api/admin/properties");
     setProperties(res.data);
   };
 
   const fetchUserStats = async () => {
-    const res = await axios.get("/api/users/stats");
+    const res = await axios.get("http://localhost:8080/api/users/stats");
     setUsers(res.data);
   };
 
   const fetchInquiries = async () => {
-    const res = await axios.get("/api/inquiries");
+    const res = await axios.get("http://localhost:8080/api/inquiries");
     setInquiries(res.data);
   };
 
   const fetchMaintenance = async () => {
-    const res = await axios.get("/api/maintenance");
+    const res = await axios.get("http://localhost:8080/api/maintenance");
     setMaintenanceRequests(res.data);
   };
 
   const handleAddAdmin = async (e) => {
     e.preventDefault();
-    await axios.post("/api/admins", adminForm);
+    await axios.post("http://localhost:8080/api/admins", adminForm);
     fetchAdmins();
     setAdminForm({ name: "", email: "" });
     alert("Admin added successfully!");

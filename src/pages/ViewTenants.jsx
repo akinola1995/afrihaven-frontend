@@ -17,7 +17,7 @@ function ViewTenants({ propertyId: propPropertyId }) {
       setLoading(true);
       try {
         // Example endpoint: /api/tenants/property/{propertyId}
-        const res = await axios.get(`/api/tenants/property/${id}`);
+        const res = await axios.get(`http://localhost:8080/api/tenants/property/${id}`);
         setTenants(res.data); // expects [{ name, unit, phone, rentStatus }, ...]
       } catch (err) {
         console.error('Failed to fetch tenants:', err);

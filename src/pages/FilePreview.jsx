@@ -66,8 +66,8 @@ function FilePreview() {
   const fetchDocs = async () => {
     try {
       const endpoint = propertyId
-        ? `/api/documents/property/${propertyId}`
-        : '/api/documents';
+        ? `http://localhost:8080/api/documents/property/${propertyId}`
+        : 'http://localhost:8080/api/documents';
 
       const res = await axios.get(endpoint);
       setDocs(res.data);

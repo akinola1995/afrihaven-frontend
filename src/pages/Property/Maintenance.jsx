@@ -233,7 +233,7 @@ function Maintenance() {
 
   const fetchRequests = async () => {
     try {
-      const res = await axios.get(`/api/maintenance/${propertyId || ''}`);
+      const res = await axios.get(`http://localhost:8080/api/maintenance/${propertyId || ''}`);
       setRequests(res.data.reverse());
     } catch (err) {
       console.error('Error fetching requests', err);
@@ -251,7 +251,7 @@ function Maintenance() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('/api/maintenance', form);
+      await axios.post('http://localhost:8080/api/maintenance', form);
       fetchRequests();
       setForm({ ...form, issue: '', urgency: 'Medium' });
     } catch (err) {
@@ -261,7 +261,7 @@ function Maintenance() {
 
   const handleStatusUpdate = async (id, status) => {
     try {
-      await axios.patch(`/api/maintenance/${id}/status`, { status });
+      await axios.patch(`http://localhost:8080/api/maintenance/${id}/status`, { status });
       fetchRequests();
     } catch (err) {
       console.error('Error updating status', err);
@@ -272,7 +272,7 @@ function Maintenance() {
     const text = replies[id];
     if (!text) return;
     try {
-      await axios.post(`/api/maintenance/${id}/comment`, {
+      await axios.post(`http://localhost:8080/api/maintenance/${id}/comment`, {
         from: role,
         text,
       });
