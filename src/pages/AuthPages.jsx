@@ -277,6 +277,101 @@ const validUsers = {
   'guest@afrihaven.com': { password: 'inquire123', role: 'Inquirer' }
 };
 
+
+// const Login = () => {
+//   const navigate = useNavigate();
+//   const [form, setForm] = useState({ email: '', password: '' });
+//   const [error, setError] = useState('');
+
+//   const handleChange = (e) => {
+//     setForm({ ...form, [e.target.name]: e.target.value });
+//   };
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     setError('');
+
+//     try {
+//       const response = await axios.post('http://localhost:8080/api/auth/login', form);
+//       const { role, email, message } = response.data;
+
+//       if (message === 'success') {
+//         localStorage.setItem('auth', 'true');
+//         localStorage.setItem('role', role);
+//         localStorage.setItem('email', email);
+
+//         switch (role) {
+//           case 'Owner':
+//             navigate('/dashboard/owner');
+//             break;
+//           case 'Agent':
+//             navigate('/dashboard/agent');
+//             break;
+//           case 'Admin':
+//             navigate('/dashboard/admin');
+//             break;
+//           case 'Tenant':
+//             navigate('/dashboard/tenant');
+//             break;
+//           case 'Buyer':
+//             navigate('/dashboard/buyer');
+//             break;
+//           case 'Renter':
+//             navigate('/dashboard/renter');
+//             break;
+//           default:
+//             navigate('/dashboard/inquirer');
+//         }
+//       } else {
+//         setError('Invalid credentials. Please try again.');
+//       }
+//     } catch (err) {
+//       setError('Authentication failed. Server may be unavailable.');
+//     }
+//   };
+
+//   return (
+//     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-6">
+//       <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
+//         <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">Login</h2>
+//         {error && <p className="text-red-600 text-sm mb-3">{error}</p>}
+//         <form onSubmit={handleSubmit} className="space-y-4">
+//           <input
+//             type="email"
+//             name="email"
+//             placeholder="Email"
+//             value={form.email}
+//             onChange={handleChange}
+//             className="w-full border p-2 rounded"
+//             required
+//           />
+//           <input
+//             type="password"
+//             name="password"
+//             placeholder="Password"
+//             value={form.password}
+//             onChange={handleChange}
+//             className="w-full border p-2 rounded"
+//             required
+//           />
+//           <button
+//             type="submit"
+//             className="bg-blue-600 text-white w-full py-2 rounded hover:bg-blue-700 transition"
+//           >
+//             Login
+//           </button>
+//         </form>
+//         <p className="text-sm text-center mt-4 text-gray-600">
+//           Don’t have an account?{' '}
+//           <a href="/register" className="text-blue-600 underline">
+//             Register here
+//           </a>
+//         </p>
+//       </div>
+//     </div>
+//   );
+// };
+
 const Login = () => {
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: '', password: '' });
@@ -292,34 +387,17 @@ const Login = () => {
 
     try {
       const response = await axios.post('http://localhost:8080/api/auth/login', form);
-      const { role, email, message } = response.data;
 
-      if (message === 'success') {
-        localStorage.setItem('auth', 'true');
-        localStorage.setItem('role', role);
-        localStorage.setItem('email', email);
+      if (response.data.message === "success") {
+        const role = response.data.role;
+        localStorage.setItem("auth", "true");
+        localStorage.setItem("email", response.data.email);
+        localStorage.setItem("role", role);
 
-        switch (role) {
-          case 'Owner':
-            navigate('/dashboard/owner');
-            break;
-          case 'Agent':
-            navigate('/dashboard/agent');
-            break;
-          case 'Admin':
-            navigate('/dashboard/admin');
-            break;
-          case 'Tenant':
-            navigate('/dashboard/tenant');
-            break;
-          case 'Buyer':
-            navigate('/dashboard/buyer');
-            break;
-          case 'Renter':
-            navigate('/dashboard/renter');
-            break;
-          default:
-            navigate('/dashboard/inquirer');
+        if (role && typeof role === "string") {
+          navigate(`/dashboard/${role.toLowerCase()}`);
+        } else {
+          setError("No user role detected. Please contact support.");
         }
       } else {
         setError('Invalid credentials. Please try again.');
@@ -370,5 +448,6 @@ const Login = () => {
     </div>
   );
 };
+
 
 export { Landing, Login };

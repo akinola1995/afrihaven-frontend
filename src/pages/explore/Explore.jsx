@@ -15,13 +15,22 @@ export default function Explore() {
       const params = new URLSearchParams(location.search);
       setQueryString(params.toString());
 
-      try {
-        const res = await axios.get(`http://localhost:8080/api/properties/search?${params.toString()}`);
-        setResults(res.data);
-      } catch (err) {
-        console.error("Failed to fetch search results", err);
-        setResults([]);
-      }
+try {
+  const res = await axios.get(`http://localhost:8080/api/properties/search?${params.toString()}`);
+  console.log('API response:', res.data); // <-- Add this!
+  let properties = res.data;
+  if (!Array.isArray(properties)) {
+    if (Array.isArray(properties.results)) properties = properties.results;
+    else if (Array.isArray(properties.content)) properties = properties.content;
+    else if (properties) properties = [properties];
+    else properties = [];
+  }
+  setResults(properties);
+} catch (err) {
+  console.error("Failed to fetch search results", err);
+  setResults([]);
+}
+
       setLoading(false);
     };
 
