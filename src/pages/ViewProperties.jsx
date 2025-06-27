@@ -13,20 +13,22 @@ function ViewProperties() {
 
       try {
         let endpoint = '';
-        if (role === 'Owner') {
+        if (role === 'OWNER') {
           endpoint = `http://localhost:8080/api/properties/owner/${email}`;
-        } else if (role === 'Agent') {
+        } else if (role === 'AGENT') {
           endpoint = `http://localhost:8080/api/properties/agent/${email}`;
         } 
         const res = await axios.get(endpoint);
-        setProperties(res.data);
-      } catch (err) {
-        console.error('Error fetching properties:', err);
-      }
-    };
+ // Defensive: Make sure it's always an array
+      setProperties(Array.isArray(res.data) ? res.data : []);
+    } catch (err) {
+      console.error('Error fetching properties:', err);
+      setProperties([]); // always reset to empty array on error
+    }
+  };
 
-    fetchProperties();
-  }, [email, role]);
+  fetchProperties();
+}, [email, role]);
 
   return (
     <div className="p-6 max-w-6xl mx-auto">
